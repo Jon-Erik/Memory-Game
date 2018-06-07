@@ -1,0 +1,23 @@
+
+h1.display-4 {
+	font-family: 'Merriweather', serif;
+}
+
+p.lead {
+	font-family: 'Bad Script', cursive;
+	font-size: 40px;
+}
+
+p.instructions {
+	font-family: 'Quattrocento Sans', sans-serif;
+	font-size: 20px;
+}
+
+h5.game-message, h5.scores {
+	font-family: 'Quattrocento Sans', sans-serif;
+	text-align: center;
+}
+
+/*font-family: 'Merriweather', serif;
+font-family: 'Bad Script', cursive;
+font-family: 'Quattrocento Sans', sans-serif;*/
