@@ -1,5 +1,6 @@
 import React from "react";
 import "./Tiles.css";
+import GameMessages from "../GameMessages"
 
 import bachPhoto from "../../images/bach.jpg";
 import bartokPhoto from "../../images/bartok.jpg";
@@ -77,19 +78,101 @@ var composers = [
 	}
 ]
 
-const Tiles = () => {
+class Tiles extends React.Component {
 
-	return (
-		<div className="row justify-content-center">
-		{composers.map(composer => (
-			<div className="card col-lg-3" key={composer.key}>
-			  <img className="card-img"  src={composer.src} alt="Card"/>
-			  <div>
-			  </div>
+	state = {
+		guessedTiles : [],
+		topScore: 0,
+		currentScore: 0,
+		gameMessage: "Click a composer to begin!"
+	};
+
+	shuffleTiles = (array) => {
+		var currentIndex = array.length, temporaryValue, randomIndex;
+
+		while (0 !== currentIndex) {
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+
+			temporaryValue = array[currentIndex];
+			array[currentIndex] = array[randomIndex];
+			array[randomIndex] = temporaryValue;
+		}
+		return array;
+	}
+
+	goodClick = (composer) => {
+		if (this.state.currentScore === 11) {
+			this.setState({
+				topScore: 12,
+				currentScore: 0,
+				guessedTiles: [],
+				gameMessage: "You win! You just clicked on " + composer + " and have clicked on all 12 composers. The game has been reset."
+			});
+			// console.log(this.state);
+		} else {
+			var newScore = this.state.currentScore + 1;
+			this.setState({
+				gameMessage: "You guessed correctly! You clicked on " + composer + ".",
+				currentScore: newScore,
+			});
+		}
+	}
+
+	badClick = (composer) => {
+		if (this.state.currentScore > this.state.topScore) {
+			this.setState({
+				topScore: this.state.currentScore
+			})
+		}
+
+		this.setState({
+			guessedTiles: [],
+			currentScore: 0,
+			gameMessage: "You guessed incorrectly! You already clicked on " + composer + ". The game has been reset."
+		});
+	}
+
+	handleTileClick = event => {
+		let key = event.target.id;
+		let composer = event.target.name;
+		//console.log(event.target);
+		if (this.state.guessedTiles.includes(key)) {
+			this.badClick(composer);
+		} else {
+			var newArray = this.state.guessedTiles.concat(key);
+			this.setState({
+				guessedTiles: newArray
+			});
+			this.goodClick(composer);
+		}
+	}
+
+	render() {
+		return (
+			<div>
+				<GameMessages 
+					message={this.state.gameMessage}
+					currentScore={this.state.currentScore}
+					topScore={this.state.topScore}/>
+				<div className="row justify-content-center">
+					{this.shuffleTiles(composers).map(composer => (
+						<div className="card col-lg-3" key={composer.key} >
+						  <img 
+							  className="card-img" 
+							  src={composer.src} 
+							  id={composer.key} 
+							  onClick={this.handleTileClick}
+							  name={composer.name} 
+							  alt="Card"/>
+						  <div>
+						  </div>
+						</div>
+					))}
+				</div>
 			</div>
-		))}
-		</div>
-	);
-};
+		);
+	}
+}
 
 export default Tiles;
