@@ -2,6 +2,7 @@ import React from "react";
 import "./Tiles.css";
 import GameMessages from "../GameMessages"
 
+//local images are imported
 import bachPhoto from "../../images/bach.jpg";
 import bartokPhoto from "../../images/bartok.jpg";
 import beethovenPhoto from "../../images/beethoven.jpg";
@@ -15,6 +16,7 @@ import shostakovichPhoto from "../../images/shostakovich.jpg";
 import straussPhoto from "../../images/strauss.jpg";
 import vivaldiPhoto from "../../images/vivaldi.jpg";
 
+//local images are put into an array of objects with name and key
 var composers = [
 	{
 		"key": 1,
@@ -87,6 +89,7 @@ class Tiles extends React.Component {
 		gameMessage: "Click a composer to begin!"
 	};
 
+	//array for shuffling the order of the array to shuffle card display on each click
 	shuffleTiles = (array) => {
 		var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -101,6 +104,8 @@ class Tiles extends React.Component {
 		return array;
 	}
 
+	//on a correct click, the user earns a point and the function checks whether he has won by
+	//checking if the user has clicked all 12 tiles
 	goodClick = (composer) => {
 		if (this.state.currentScore === 11) {
 			this.setState({
@@ -113,12 +118,13 @@ class Tiles extends React.Component {
 		} else {
 			var newScore = this.state.currentScore + 1;
 			this.setState({
-				gameMessage: "You guessed correctly! You clicked on " + composer + ".",
+				gameMessage: "Correct! You clicked on " + composer + ".",
 				currentScore: newScore,
 			});
 		}
 	}
 
+	//on an incorrect click, the function checks if there is a new high score and resets the game
 	badClick = (composer) => {
 		if (this.state.currentScore > this.state.topScore) {
 			this.setState({
@@ -129,11 +135,15 @@ class Tiles extends React.Component {
 		this.setState({
 			guessedTiles: [],
 			currentScore: 0,
-			gameMessage: "You guessed incorrectly! You already clicked on " + composer + ". The game has been reset."
+			gameMessage: "Incorrect! You already clicked on " + composer + ". The game has been reset."
 		});
 	}
 
+	//each time a tile is clicked, the name and id of the event target are extracted,
+	//and the function checks whether the id has been clicked or not by checking against an array
 	handleTileClick = event => {
+		event.preventDefault()
+
 		let key = event.target.id;
 		let composer = event.target.name;
 		//console.log(event.target);
@@ -158,21 +168,21 @@ class Tiles extends React.Component {
 				<div className="row justify-content-center">
 					{this.shuffleTiles(composers).map(composer => (
 						<div className="card col-lg-3" key={composer.key} >
-						  <img 
+						  <a href="">
+						  	<img 
 							  className="card-img" 
 							  src={composer.src} 
 							  id={composer.key} 
 							  onClick={this.handleTileClick}
 							  name={composer.name} 
 							  alt="Card"/>
-						  <div>
-						  </div>
+							</a>  
 						</div>
 					))}
 				</div>
 			</div>
 		);
-	}
-}
+	};
+};
 
 export default Tiles;

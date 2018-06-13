@@ -6,8 +6,12 @@
 	padding: 0;
 }
 
-.card-img {
-	border-radius: 0;
-	height: 100%;
-	
+.card:hover {
+	transform: scale(1.075);
+	transition: width 0.15s, height 0.15s, transform 0.15s;
+}
+
+.card img {
+	border-radius: 0 !important;
+	height: 170.5px;
 }

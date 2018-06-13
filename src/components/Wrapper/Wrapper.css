@@ -5,3 +5,8 @@
 	border-top: 5px solid #524226;
 	border-bottom: 5px solid #524226;
 }
+
+.game {
+	max-width: 715px;
+	margin: auto;
+}
